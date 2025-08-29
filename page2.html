@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BamBam's Fashion Diary — New Entry</title>
+
+  <!-- Fonts (same as page 1 so the vibe matches) -->
+  <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&display=swap" rel="stylesheet">
+
+  <!-- Local 'Audio Nugget' font (optional, same as page 1) -->
+  <link rel="preload" href="fonts/audio-nugget.regular.ttf" as="font" type="font/ttf">
+  <style>
+    @font-face {
+      font-family: 'Audio Nugget';
+      src: url('fonts/audio-nugget.regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+  </style>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Title banner using your existing .y3k-banner style -->
+  <h1 class="y3k-banner">
+    <span class="title-text">Write Your Entry</span>
+  </h1>
+
+  <!-- Floating one-button navigator (cycles pages) -->
+  <a id="navCycle" class="nav-cta nav-cta--floating">Next ➡️</a>
+
+  <p id="Paragraph">Tell your diary what’s on your mind today.</p>
+
+  <!-- Form Card -->
+  <form id="entryForm" class="form-card" novalidate>
+    <div class="form-field">
+      <label for="entryDate">Date</label>
+      <input type="date" id="entryDate" required>
+    </div>
+
+    <div class="form-field">
+      <label for="entryTitle">Title (optional)</label>
+      <input type="text" id="entryTitle" placeholder="e.g., Sample Sale Wins">
+    </div>
+
+    <div class="form-field">
+      <label for="entryMood">Mood</label>
+      <select id="entryMood">
+        <option value="">Select mood…</option>
+        <option>✨ Happy</option>
+        <option>💪 Bossy</option>
+        <option>💖 Soft</option>
+        <option>🌀 Chaos</option>
+        <option>😌 Chill</option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label for="entryBody">Your entry</label>
+      <textarea id="entryBody" rows="10" placeholder="Write your diary entry here…" maxlength="2000" required></textarea>
+      <small id="charTip">0 / 2000</small>
+    </div>
+
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">Preview</button>
+      <button type="button" id="saveBtn" class="btn">Save to Browser</button>
+      <button type="button" id="clearBtn" class="btn btn-outline">Clear</button>
+    </div>
+
+    <p class="help-note">Saved entries stay in <b>your browser</b> only (localStorage). You can clear them anytime.</p>
+  </form>
+
+  <!-- Preview Box (reuses your Y2K frame style) -->
+  <div id="previewBox" class="y2k-frame" style="display:none;">
+    <div class="y2k-inner">
+      <h2 id="previewTitle" style="margin-top:0;"></h2>
+      <p id="previewMeta" style="margin-top:0; font-style:italic; opacity:0.85;"></p>
+      <p id="previewBody" style="white-space:pre-wrap;"></p>
+    </div>
+  </div>
+
+  <!-- Back link -->
+  <a href="index.html" class="next-link" style="margin: 12px 0 80px;">⬅️ Back to Page 1</a>
+
+  <!-- Bottom ticker (optional, matching page 1) -->
+  <div class="ticker" aria-label="y2k ticker">
+    <div class="ticker-track">★ New Entry • Be kind to yourself • Fashion + Feelings • Save locally • ★ New Entry • Be kind to yourself • Fashion + Feelings • Save locally • </div>
+  </div>
+
+  <script>
+    // Helpers
+    function todayISO() {
+      const d = new Date();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return d.getFullYear() + '-' + m + '-' + day;
+    }
+
+    function byId(id) { return document.getElementById(id); }
+
+    // Elements
+    const entryForm = byId('entryForm');
+    const entryDate = byId('entryDate');
+    const entryTitle = byId('entryTitle');
+    const entryMood = byId('entryMood');
+    const entryBody = byId('entryBody');
+    const charTip = byId('charTip');
+
+    const previewBox = byId('previewBox');
+    const previewTitle = byId('previewTitle');
+    const previewMeta = byId('previewMeta');
+    const previewBody = byId('previewBody');
+
+    const saveBtn = byId('saveBtn');
+    const clearBtn = byId('clearBtn');
+
+    // Init
+    entryDate.value = todayISO();
+    charTip.textContent = "0 / " + entryBody.maxLength;
+
+    // Character counter
+    entryBody.addEventListener('input', function () {
+      charTip.textContent = entryBody.value.length + " / " + entryBody.maxLength;
+    });
+
+    // Preview (no HTML injection: using textContent)
+    entryForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      if (!entryBody.value.trim()) {
+        alert('Please write something in your entry.');
+        entryBody.focus();
+        return;
+      }
+
+      const title = entryTitle.value.trim();
+      const mood = entryMood.value.trim();
+      const date = entryDate.value;
+
+      previewTitle.textContent = title || 'Untitled Entry';
+      previewMeta.textContent = (date ? date : '') + (mood ? ' • ' + mood : '');
+      previewBody.textContent = entryBody.value;
+
+      previewBox.style.display = 'block';
+      // Use your existing reveal animation class
+      previewBox.classList.add('reveal');
+    });
+
+    // Save to localStorage
+    saveBtn.addEventListener('click', function () {
+      if (!entryBody.value.trim()) {
+        alert('Write your entry first, then Save.');
+        entryBody.focus();
+        return;
+      }
+
+      const entry = {
+        date: entryDate.value,
+        title: entryTitle.value,
+        mood: entryMood.value,
+        body: entryBody.value,
+        savedAt: new Date().toISOString()
+      };
+
+      const key = 'bambamDiaryEntries';
+      const existing = JSON.parse(localStorage.getItem(key) || '[]');
+      existing.push(entry);
+      localStorage.setItem(key, JSON.stringify(existing));
+
+      alert('Saved in your browser!');
+    });
+
+    // Clear form + preview
+    clearBtn.addEventListener('click', function () {
+      entryForm.reset();
+      entryDate.value = todayISO();
+      charTip.textContent = "0 / " + entryBody.maxLength;
+      previewBox.style.display = 'none';
+      previewBox.classList.remove('reveal');
+    });
+  </script>
+
+  <!-- One-button page cycler -->
+  <script>
+    (function () {
+      var nav = document.getElementById('navCycle');
+      if (!nav) return;
+      var pages = ['index.html', 'page2.html', 'page3.html'];
+      var current = location.pathname.split('/').pop() || 'index.html';
+      var idx = pages.indexOf(current);
+      if (idx === -1) idx = 0;
+      var next = pages[(idx + 1) % pages.length];
+      nav.setAttribute('href', next);
+      nav.setAttribute('aria-label', 'Go to ' + next);
+    })();
+  </script>
+</body>
+</html>

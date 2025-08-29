@@ -1,0 +1,568 @@
+/* Basic page layout (beginner-friendly) */
+body {
+  background-color: #ff0ca6;
+  font-family: 'Parisienne', cursive;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* No generic h1 styling on purpose.
+   We only style the banner wrapper class on your title element. */
+
+/* =============================
+   SIMPLE Y2K GIRLY BANNER (HOT PINK, BEGINNER CSS)
+   Usage:
+   <h1 class="y3k-banner"><span class="title-text">BAMBAMS Diary</span></h1>
+   ============================= */
+.y3k-banner {
+  display: inline-block;
+  padding: 14px 28px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+
+  /* Hot-pink candy gradient bar */
+  background: linear-gradient(90deg, #ff9ad5, #ff4fb2, #ff9ad5);
+
+  /* Soft round edges + glossy ring */
+  border: 3px solid #ff99cc;
+  border-radius: 20px;
+
+  /* Y2K glow */
+  box-shadow:
+    0 8px 20px rgba(255, 105, 180, 0.5),
+    inset 0 0 8px rgba(255, 255, 255, 0.45);
+}
+
+/* Title text on the banner */
+.y3k-banner .title-text {
+  color: #ffffff;               /* white over pink */
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: none;         /* keep your original casing */
+
+  /* subtle glow + readable shadow */
+  text-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.25),
+    0 0 8px rgba(255, 210, 240, 0.9);
+}
+
+/* Simple hover polish (still beginner-level) */
+.y3k-banner {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.y3k-banner:hover {
+  transform: scale(1.02);
+  box-shadow:
+    0 10px 26px rgba(255, 105, 180, 0.6),
+    inset 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Small-screen tweaks for the banner */
+@media (max-width: 480px) {
+  .y3k-banner {
+    padding: 12px 20px;
+    border-radius: 16px;
+  }
+  .y3k-banner .title-text {
+    letter-spacing: 0.4px;
+  }
+}
+
+/* Music button (top-left) */
+#musicBtn {
+  font-size: 16px;
+  border: 2px solid #ff99cc;
+  background: rgb(220, 2, 162);
+  color: #ff9acc;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 8px 0;
+
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+}
+
+/* Start button AS a bow image */
+#startBtn.start-bow {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  line-height: 0;
+  margin: 8px 0;
+}
+#startBtn.start-bow img {
+  display: block;
+  width: 120px;
+  height: auto;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+#startBtn.start-bow:hover img { transform: scale(1.03); }
+#startBtn.start-bow:active img { transform: scale(0.98); }
+#startBtn.start-bow:focus-visible {
+  outline: 2px solid #ff99cc;
+  outline-offset: 4px;
+}
+
+/* Intro line */
+#Paragraph {
+  color: #ffffff;
+  max-width: 720px;
+  margin: 8px auto;
+}
+
+/* -----------------------------
+   Y2K double border around diary text
+   ----------------------------- */
+.y2k-frame { position: relative; z-index: 20; } /* keep diary above stickers */
+
+.y2k-frame {
+  display: inline-block;
+  max-width: 720px;
+  margin: 8px auto 16px auto;
+  padding: 10px;
+  border: 4px solid #ff99cc;    /* pink */
+  border-radius: 16px;
+  background: transparent;
+
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+.y2k-inner {
+  border: 4px solid #ffffff;    /* white */
+  border-radius: 12px;
+  padding: 16px;
+  background: rgba(255,255,255,0.10);
+}
+#diaryText {
+  color: #ffe0f5;
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.4;
+  text-align: left;
+}
+.reveal { opacity: 1 !important; transform: translateY(0) !important; }
+
+/* Next page link */
+.next-link {
+  color: #ffffff;
+  text-decoration: none;
+  border: 2px solid #ff99cc;
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+/* -----------------------------
+   Simple Y2K ticker (BOTTOM OF PAGE)
+   ----------------------------- */
+.ticker {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 182, 218, 0.4);
+  overflow: hidden;
+  border-top: 2px solid #ff99cc;
+}
+.ticker-track {
+  white-space: nowrap;
+  display: inline-block;
+  padding: 6px 0;
+  animation: scroll-left 22s linear infinite;
+  color: #660033;
+  font-weight: bold;
+}
+@keyframes scroll-left {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* -----------------------------
+   Stickers (ALL backgroundless style)
+   ----------------------------- */
+.sticker {
+  position: absolute;
+  /* backgroundless look: same as BamBam.png */
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+
+  width: auto;
+  height: auto;
+  object-fit: contain;     /* respect transparent edges */
+  max-width: 220px;
+  max-height: 280px;
+
+  z-index: 5;              /* below the diary frame */
+}
+
+/* Sticker placements (kept to edges so they don't cover the diary) */
+.sticker1 {
+  transform: rotate(-6deg);
+  top: 120px;
+  left: 16px;
+}
+.sticker2 {
+  transform: rotate(18deg);
+  right: 40px;
+  top: 90px;
+  max-width: 220px;
+  max-height: 220px;
+}
+
+/* Bottom-left corner (above ticker) */
+.sticker3 {
+  left: 16px;
+  bottom: 88px;
+  transform: rotate(-8deg);
+  max-width: 100px;
+  max-height: 100px;
+}
+
+/* Bottom-right corner (above ticker) */
+.sticker4 {
+  right: 30px;
+  bottom: 88px;
+  transform: rotate(10deg);
+  max-width: 200px;
+  max-height: 200px;
+}
+
+/* Mid-left edge */
+.sticker5 {
+  left: 10px;
+  top: 220px;
+  transform: rotate(-14deg);
+  max-width: 90px;
+  max-height: 90px;
+}
+
+/* Mid-right edge */
+.sticker6 {
+  right: 10px;
+  bottom: 260px;
+  transform: rotate(12deg);
+  max-width: 90px;
+  max-height: 90px;
+}
+
+/* Upper-right edge (below sticker2) */
+.sticker7 {
+  right: 24px;
+  top: 250px;
+  transform: rotate(-6deg);
+  max-width: 200px;
+  max-height: 200px;
+}
+
+/* Upper-left edge (below sticker1) */
+.sticker8 {
+  left: 24px;
+  top: 400px;
+  transform: rotate(6deg);
+  max-width: 150px;
+  max-height: 150px;
+}
+
+/* Small-screen tweaks */
+@media (max-width: 480px) {
+  .sticker1 { top: 132px; left: 8px; max-width: 180px; }
+  .sticker2 { right: 8px; top: 96px; max-width: 180px; }
+  .sticker3, .sticker4 { bottom: 96px; max-width: 84px; max-height: 84px; }
+  .sticker5, .sticker6, .sticker7, .sticker8 { max-width: 72px; max-height: 72px; }
+
+  #startBtn.start-bow img { width: 100px; }
+}
+/* ---------- Page 2: simple form card (beginner-friendly) ---------- */
+.form-card {
+  max-width: 720px;
+  width: 92%;
+  margin: 12px auto 16px;
+  padding: 16px;
+  border: 3px solid #ff99cc;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.10);
+  box-shadow: 0 6px 18px rgba(255, 105, 180, 0.35);
+  text-align: left;
+}
+
+.form-field { margin-bottom: 12px; }
+
+.form-field label {
+  display: block;
+  color: #ffffff;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #ff99cc;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.85);
+  font-family: inherit;
+  font-size: 16px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.form-field textarea {
+  resize: vertical;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: #ff6ab6;
+  box-shadow: 0 0 0 3px rgba(255, 172, 214, 0.35);
+}
+
+#charTip {
+  display: inline-block;
+  margin-top: 6px;
+  color: #ffe0f5;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.btn {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 2px solid #ff99cc;
+  background: linear-gradient(90deg, #ffd2ef, #ffb3dd);
+  color: #660033;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn:hover {
+  filter: brightness(1.05);
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #ff9ad5, #ff4fb2, #ff9ad5);
+  color: #ffffff;
+  border-color: #ff5ca8;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #ffffff;
+}
+
+/* small screens */
+@media (max-width: 480px) {
+  .form-card { width: 94%; padding: 14px; }
+}
+
+/* ---------- Page 3: Drag & Drop Sticker Shop (beginner-friendly) ---------- */
+.shop-wrap {
+  width: 92%;
+  max-width: 980px;
+  margin: 12px auto;
+  display: block;          /* simple layout */
+}
+
+/* Grid of stickers */
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 10px 0 16px;
+}
+
+.shop-item {
+  width: 100%;
+  height: 160px;
+  object-fit: contain;
+  background: rgba(255,255,255,0.2);
+  border: 2px solid #ff99cc;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 6px 18px rgba(255, 105, 180, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.25s ease;
+  cursor: grab;
+}
+
+.shop-item:active {
+  cursor: grabbing;
+}
+
+.shop-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(255, 105, 180, 0.45);
+}
+
+/* Tiny vanish animation when added */
+.shop-item.vanish {
+  opacity: 0;
+  transform: scale(0.96);
+}
+
+/* Drop zone */
+.bag {
+  border: 3px dashed #ff99cc;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.12);
+  padding: 14px;
+  box-shadow: 0 6px 18px rgba(255, 105, 180, 0.35);
+  text-align: left;
+}
+
+.bag.over {
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 24px rgba(255, 105, 180, 0.5);
+}
+
+.bag-title {
+  color: #ffffff;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.bag-count {
+  color: #ffe0f5;
+  margin-bottom: 8px;
+}
+
+.bag-hint {
+  color: #ffffff;
+  font-size: 14px;
+  opacity: 0.9;
+  margin-bottom: 6px;
+}
+
+.bag-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bag-list li {
+  background: linear-gradient(90deg, #ffd2ef, #ffb3dd);
+  color: #660033;
+  border: 2px solid #ff99cc;
+  border-radius: 10px;
+  padding: 6px 10px;
+  display: inline-block;
+  margin: 4px 6px 0 0;
+  font-weight: 700;
+}
+
+/* Thank-you popup */
+.thankyou.hidden { display: none; }
+
+.thankyou {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.thankyou-card {
+  background: linear-gradient(90deg, #ff9ad5, #ff4fb2, #ff9ad5);
+  border: 3px solid #ff99cc;
+  border-radius: 16px;
+  padding: 16px 20px;
+  text-align: center;
+  box-shadow: 0 10px 28px rgba(255, 105, 180, 0.55);
+}
+
+.ty-text {
+  color: #ffffff;
+  font-weight: 800;
+  margin: 0 0 10px;
+}
+
+.ty-close.btn {
+  border: 2px solid #ff99cc;
+  background: #ffffff;
+  color: #660033;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+/* Small screens */
+@media (max-width: 700px) {
+  .shop-grid { grid-template-columns: repeat(3, 1fr); }
+  .shop-item { height: 140px; }
+}
+
+@media (max-width: 480px) {
+  .shop-grid { grid-template-columns: repeat(2, 1fr); }
+  .shop-item { height: 120px; }
+}
+
+/* --- SBA add-ons: Page 1 GIF + mini form --- */
+.gif-hero {
+  width: 280px;
+  max-width: 90vw;
+  height: auto;
+  margin: 10px 0;
+  border: 3px solid #ff99cc;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(255, 105, 180, 0.35);
+}
+
+/* Mini second form */
+.mini-form {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 10px;
+  border: 2px solid #ff99cc;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.10);
+  margin: 8px 0 4px;
+}
+
+.mini-form label {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.mini-form input[type="email"] {
+  padding: 8px 10px;
+  border: 2px solid #ff99cc;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.85);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.mini-form button {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 2px solid #ff99cc;
+  background: linear-gradient(90deg, #ffd2ef, #ffb3dd);
+  color: #660033;
+  font-weight: 800;
+  cursor: pointer;
+}

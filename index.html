@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fashion Diary - Page 1</title>
+
+  <!-- web fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&display=swap" rel="stylesheet">
+
+  <!--  local font -->
+  <link rel="preload" href="fonts/audio-nugget.regular.ttf" as="font" type="font/ttf">
+  <style>
+    @font-face {
+      font-family: 'Audio Nugget';
+      src: url('fonts/audio-nugget.regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+  </style>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <h1 class="y3k-banner">
+    <span class="title-text">bambamsdiary</span>
+  </h1>
+
+
+  <!-- Music -->
+  <button id="musicBtn">Music</button>
+  <audio id="bgMusic" loop preload="none">
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Stickers (backgroundless style for all) -->
+  <img src="BamBam.png" alt="BamBam" class="sticker sticker1">
+  <img src="ny.png" alt="NYC" class="sticker sticker2">
+  <img src="acne.png" alt="sticker 3" class="sticker sticker3">
+  <img src="conceal.png" alt="sticker 4" class="sticker sticker4">
+  <img src="curve.png" alt="sticker 5" class="sticker sticker5">
+  <img src="sneaker.png" alt="sticker 6" class="sticker sticker6">
+  <img src="liberty.png" alt="sticker 7" class="sticker sticker7">
+  <img src="lv.png" alt="sticker 8" class="sticker sticker8">
+
+  <!-- Intro line -->
+  <p id="Paragraph">Hi Diary,</p>
+
+  <!-- Start button as a bow image -->
+  <button id="startBtn" class="start-bow" aria-label="Start">
+    <img src="bow.png" alt="">
+  </button>
+
+  <!-- Y2K Border -->
+  <div id="diaryFrame" class="y2k-frame">
+    <div class="y2k-inner">
+      <p id="diaryText">
+Hey Diary — it’s BamBam.
+
+I’m a Brooklyn-born fashion girl and a 24-year-old software engineer with big taste. This diary is where I blend code with couture: outfit hunts, sample sales, designer dupes, beauty finds, and the little NYC moments that make a look feel legendary. I’m here to archive the fits, the fabric, and the feelings — while building apps that make fashion easier (and way more fun).
+
+If you’re into pink gloss, clean lines, chrome details, and bold ideas, you’re in the right place. Let’s shop smart, style loud, and keep it kind.
+
+Welcome to my fashion diary. 💕
+      </p>
+    </div>
+  </div>
+
+  <!-- Next page link -->
+  <a href="page2.html" class="next-link" id="nextPage" style="display: none;">Go to Page 2 ➡️</a>
+
+  <!-- Simple Y2K ticker -->
+  <div class="ticker" aria-label="y2k ticker">
+    <div class="ticker-track">★ BamBam’s Bloom • Y2K vibes • NYC escapades • shop & style with me • ★ BamBam’s Bloom • Y2K vibes • NYC escapades • shop & style with me • </div>
+  </div>
+
+  <script>
+    // Reveal the framed diary text, then show next link
+    var startBtn = document.getElementById('startBtn');
+    var frame = document.getElementById('diaryFrame');
+    var nextLink = document.getElementById('nextPage');
+
+    frame.classList.remove('reveal');
+
+    startBtn.addEventListener('click', function () {
+      startBtn.style.display = 'none';
+      frame.classList.add('reveal');
+      setTimeout(function () {
+        nextLink.style.display = 'inline-block';
+      }, 1000);
+    });
+
+    // Music toggle
+    var musicBtn = document.getElementById('musicBtn');
+    var bgMusic = document.getElementById('bgMusic');
+    var isPlaying = false;
+
+    musicBtn.addEventListener('click', function () {
+      if (!isPlaying) {
+        bgMusic.play().then(function () {
+          isPlaying = true;
+          musicBtn.textContent = 'Pause Music';
+        }).catch(function () {
+          alert('Tap the button again to start the music.');
+        });
+      } else {
+        bgMusic.pause();
+        isPlaying = false;
+        musicBtn.textContent = 'Music';
+      }
+    });
+  </script>
+</body>
+</html>

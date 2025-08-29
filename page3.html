@@ -1,0 +1,257 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BamBam's Sticker Shop</title>
+
+  <!-- Fonts to keep the vibe consistent -->
+  <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&display=swap" rel="stylesheet">
+
+  <!-- Local 'Audio Nugget' (optional, same as page 1/2) -->
+  <link rel="preload" href="fonts/audio-nugget.regular.ttf" as="font" type="font/ttf">
+  <style>
+    @font-face {
+      font-family: 'Audio Nugget';
+      src: url('fonts/audio-nugget.regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    /* --- Inline styles for the receipt table (beginner-friendly) --- */
+    .receipt {
+      width: 100%;
+      max-width: 720px;
+      margin: 12px auto 16px;
+      border-collapse: collapse;
+      background: rgba(255,255,255,0.10);
+      border: 3px solid #ff99cc;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .receipt caption {
+      color: #ffffff;
+      font-weight: 800;
+      padding: 8px;
+    }
+    .receipt th, .receipt td {
+      border: 2px solid #ff99cc;
+      padding: 8px 10px;
+      color: #ffffff;
+      text-align: left;
+    }
+    .receipt thead th {
+      background: linear-gradient(90deg, #ff9ad5, #ff4fb2, #ff9ad5);
+    }
+    .receipt tfoot th {
+      background: rgba(255,255,255,0.15);
+    }
+  </style>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Title banner (reuses .y3k-banner from your CSS) -->
+  <h1 class="y3k-banner">
+    <span class="title-text">Sticker Shop</span>
+  </h1>
+
+  <!-- Floating one-button navigator (cycles pages) -->
+  <a id="navCycle" class="nav-cta nav-cta--floating">Next ➡️</a>
+
+  <p id="Paragraph" style="margin-bottom: 6px;">Drag a sticker into the bag — or tap it to add on mobile.</p>
+
+  <!-- Shopping layout -->
+  <div class="shop-wrap">
+    <!-- Sticker grid (replace src paths with your own images if you like) -->
+    <div class="shop-grid" id="shopGrid" aria-label="Sticker grid">
+      <img src="BamBam.png" alt="BamBam sticker" class="shop-item" draggable="true" data-title="BamBam">
+      <img src="ny.png" alt="NYC sticker" class="shop-item" draggable="true" data-title="NYC">
+      <img src="acne.png" alt="Acne sticker" class="shop-item" draggable="true" data-title="Acne">
+      <img src="conceal.png" alt="Conceal sticker" class="shop-item" draggable="true" data-title="Conceal">
+      <img src="curve.png" alt="Curve sticker" class="shop-item" draggable="true" data-title="Curve">
+      <img src="sneaker.png" alt="Sneaker sticker" class="shop-item" draggable="true" data-title="Sneaker">
+      <img src="liberty.png" alt="Liberty sticker" class="shop-item" draggable="true" data-title="Liberty">
+      <img src="lv.png" alt="LV sticker" class="shop-item" draggable="true" data-title="LV">
+    </div>
+
+    <!-- Bag drop zone -->
+    <div id="bag" class="bag" aria-label="Shopping bag drop zone">
+      <div class="bag-title">Shopping Bag 🛍️</div>
+      <div class="bag-count"><span id="bagCount">0</span> item(s)</div>
+      <div class="bag-hint">Drop here</div>
+      <ul id="bagList" class="bag-list" aria-live="polite"></ul>
+    </div>
+  </div>
+
+  <!-- Simple table to meet the table requirement -->
+  <table class="receipt">
+    <caption>Sample Receipt</caption>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Qty</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Sticker</td>
+        <td>1</td>
+        <td>$3.00</td>
+      </tr>
+      <tr>
+        <td>Sticker</td>
+        <td>2</td>
+        <td>$6.00</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>Total</th>
+        <th>3</th>
+        <th>$9.00</th>
+      </tr>
+    </tfoot>
+  </table>
+
+  <!-- Back link -->
+  <a href="index.html" class="next-link" style="margin: 12px 0 80px;">⬅️ Back to Page 1</a>
+
+  <!-- Ticker (optional) -->
+  <div class="ticker" aria-label="y2k ticker">
+    <div class="ticker-track">★ Drag • Drop • Shop • Thank you, babe • Y2K sparkle • ★ Drag • Drop • Shop • Thank you, babe • Y2K sparkle • </div>
+  </div>
+
+  <!-- Thank-you popup -->
+  <div id="thankYou" class="thankyou hidden" role="alert">
+    <div class="thankyou-card">
+      <p class="ty-text">Thank you for shopping! ✨</p>
+      <button id="tyClose" class="btn ty-close">OK</button>
+    </div>
+  </div>
+
+  <script>
+    // Safe helpers
+    function $(id){ return document.getElementById(id); }
+
+    const bag = $('bag');
+    const bagList = $('bagList');
+    const bagCountEl = $('bagCount');
+    const shopGrid = $('shopGrid');
+
+    const thankYou = $('thankYou');
+    const tyClose = $('tyClose');
+
+    let count = 0;
+
+    // DRAG START: attach an id for transfer
+    shopGrid.addEventListener('dragstart', function(e){
+      const target = e.target;
+      if (target && target.classList.contains('shop-item')) {
+        target.classList.add('dragging');
+        e.dataTransfer.setData('text/plain', target.src); // minimal data
+        e.dataTransfer.effectAllowed = 'move';
+      }
+    });
+
+    // DRAG END: clean class
+    shopGrid.addEventListener('dragend', function(e){
+      const target = e.target;
+      if (target && target.classList.contains('shop-item')) {
+        target.classList.remove('dragging');
+      }
+    });
+
+    // Allow drop
+    bag.addEventListener('dragover', function(e){
+      e.preventDefault();
+      bag.classList.add('over');
+      e.dataTransfer.dropEffect = 'move';
+    });
+
+    bag.addEventListener('dragleave', function(){
+      bag.classList.remove('over');
+    });
+
+    // On drop: hide item, update bag, show thanks
+    bag.addEventListener('drop', function(e){
+      e.preventDefault();
+      bag.classList.remove('over');
+
+      const src = e.dataTransfer.getData('text/plain');
+      if (!src) return;
+
+      // Find the dragging element by src
+      const item = Array.from(document.querySelectorAll('.shop-item'))
+        .find(img => img.src === src);
+
+      if (item && !item.classList.contains('vanish')) {
+        addToBag(item);
+      }
+    });
+
+    // Mobile/tap fallback: click any item to add
+    shopGrid.addEventListener('click', function(e){
+      const item = e.target;
+      if (item && item.classList.contains('shop-item')) {
+        addToBag(item);
+      }
+    });
+
+    function addToBag(imgEl){
+      // Avoid double-adding
+      if (imgEl.classList.contains('vanish')) return;
+
+      // Visual remove from grid
+      imgEl.classList.add('vanish');
+      setTimeout(function(){ imgEl.style.display = 'none'; }, 250);
+
+      // Update list safely
+      const li = document.createElement('li');
+      const label = imgEl.getAttribute('data-title') || 'Item';
+      li.textContent = label;
+      bagList.appendChild(li);
+
+      // Update count
+      count += 1;
+      bagCountEl.textContent = String(count);
+
+      // Show thank-you popup briefly
+      showThanks();
+    }
+
+    function showThanks(){
+      thankYou.classList.remove('hidden');
+      // Auto-hide after 1.4s unless user closes early
+      const t = setTimeout(hideThanks, 1400);
+      tyClose.onclick = function(){
+        clearTimeout(t);
+        hideThanks();
+      };
+    }
+
+    function hideThanks(){
+      thankYou.classList.add('hidden');
+    }
+  </script>
+
+  <!-- One-button page cycler -->
+  <script>
+    (function () {
+      var nav = document.getElementById('navCycle');
+      if (!nav) return;
+      var pages = ['index.html', 'page2.html', 'page3.html'];
+      var current = location.pathname.split('/').pop() || 'index.html';
+      var idx = pages.indexOf(current);
+      if (idx === -1) idx = 0;
+      var next = pages[(idx + 1) % pages.length];
+      nav.setAttribute('href', next);
+      nav.setAttribute('aria-label', 'Go to ' + next);
+    })();
+  </script>
+</body>
+</html>

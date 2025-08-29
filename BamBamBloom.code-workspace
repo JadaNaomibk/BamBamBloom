@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../Downloads/Crimson_Pro,Gloock,Oxanium/Crimson_Pro/static"
+		},
+		{
+			"path": "../Downloads/Crimson_Pro,Gloock,Oxanium/Gloock"
+		},
+		{
+			"path": "../Downloads/Crimson_Pro,Gloock,Oxanium/Oxanium"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "BamBamBloom"
+	}
+}
